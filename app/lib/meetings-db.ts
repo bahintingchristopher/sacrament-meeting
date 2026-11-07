@@ -13,6 +13,10 @@ const meetings: SacramentMeeting[] = [
     wardBusiness: [],
     stakeBusiness: true,
     sacramentHymn: { number: 172, title: 'While of These Emblems We Partake' },
+    sacramentAdministration: {
+      blessedBy: ['Brother Santos', 'Brother Cruz'],
+      passedBy: ['Brother Flores', 'Brother Garcia', 'Brother Ramos', 'Brother Torres']
+    },
     speakers: [
       { name: 'Elder Mendoza', topic: 'Following the Living Prophet', type: 'speaker' },
       { name: 'Ward Choir', topic: '', type: 'musical-number' }
@@ -37,6 +41,10 @@ const meetings: SacramentMeeting[] = [
     ],
     stakeBusiness: false,
     sacramentHymn: { number: 169, title: 'In Remembrance of Thy Suffering' },
+    sacramentAdministration: {
+      blessedBy: ['Brother Ramos', 'Brother Torres'],
+      passedBy: ['Brother Flores', 'Brother Garcia', 'Brother Santos', 'Brother Cruz']
+    },
     speakers: [
       { name: 'Sister Fernandez', topic: 'Faith in Jesus Christ', type: 'speaker' },
       { name: 'Youth Choir', topic: '', type: 'musical-number' },
@@ -57,6 +65,10 @@ const meetings: SacramentMeeting[] = [
     wardBusiness: [],
     stakeBusiness: true,
     sacramentHymn: { number: 174, title: 'While of These Emblems We Partake' },
+    sacramentAdministration: {
+      blessedBy: ['Brother Fernandez', 'Brother Pascual'],
+      passedBy: ['Brother Salvador', 'Brother Mercado', 'Brother Soriano', 'Brother Tolentino']
+    },
     speakers: [
       { name: 'President Ramos', topic: 'Strengthening the Rising Generation', type: 'speaker' },
       { name: 'Sister Ramos', topic: 'Faith in the Lord Jesus Christ', type: 'speaker' },
@@ -77,6 +89,10 @@ const meetings: SacramentMeeting[] = [
     wardBusiness: [],
     stakeBusiness: false,
     sacramentHymn: { number: 169, title: 'In Remembrance of Thy Suffering' },
+    sacramentAdministration: {
+      blessedBy: ['Brother Manalo', 'Brother Cabrera'],
+      passedBy: ['Brother Flores', 'Brother Santos', 'Brother Cruz', 'Brother Garcia']
+    },
     speakers: [
       { name: 'Congregation', topic: 'Testimonies of the restored gospel', type: 'speaker' },
       { name: 'Ward Choir', topic: '', type: 'musical-number' }
@@ -102,6 +118,10 @@ const meetings: SacramentMeeting[] = [
     ],
     stakeBusiness: false,
     sacramentHymn: { number: 176, title: 'While of These Emblems We Partake' },
+    sacramentAdministration: {
+      blessedBy: ['Brother Bautista', 'Brother Villanueva'],
+      passedBy: ['Brother Navarro', 'Brother Aquino', 'Brother Castillo', 'Brother Fernandez']
+    },
     speakers: [
       { name: 'Sister Mercado', topic: 'Seeking Personal Revelation', type: 'speaker' },
       { name: 'Ward Quartet', topic: '', type: 'musical-number' },
@@ -121,6 +141,10 @@ const meetings: SacramentMeeting[] = [
     wardBusiness: [{ description: 'Sustaining of new Primary president' }],
     stakeBusiness: false,
     sacramentHymn: { number: 169, title: 'In Remembrance of Thy Suffering' },
+    sacramentAdministration: {
+      blessedBy: ['Brother Torres', 'Brother Ramos'],
+      passedBy: ['Brother Pascual', 'Brother Salvador', 'Brother Mercado', 'Brother Soriano']
+    },
     speakers: [
       { name: 'Sister Fernandez', topic: 'Faith in Jesus Christ', type: 'speaker' },
       { name: 'Youth Choir', topic: '', type: 'musical-number' }

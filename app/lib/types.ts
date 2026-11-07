@@ -19,6 +19,11 @@ export interface WardBusinessItem {
   description: string;
 }
 
+export interface SacramentAdministration {
+  blessedBy: string[];
+  passedBy: string[];
+}
+
 export interface SacramentMeeting {
   id: number;
   date: string;              // ISO date string: 'YYYY-MM-DD'
@@ -31,6 +36,7 @@ export interface SacramentMeeting {
   wardBusiness: WardBusinessItem[];
   stakeBusiness: boolean;
   sacramentHymn: Hymn;
+  sacramentAdministration: SacramentAdministration;
   speakers: SpeakerItem[];
   closingHymn: Hymn;
   closingPrayer: string;
