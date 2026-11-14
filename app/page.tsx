@@ -27,7 +27,7 @@ export default function HomePage() {
               href="/meetings/current"
               className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
             >
-              This Week&apos;s Program
+              This Week&apos;s Programs
             </Link>
           </div>
         </div>
