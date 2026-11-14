@@ -36,7 +36,7 @@ export default function MeetingDetail({ meeting }: MeetingDetailProps) {
         <span className="text-xs font-semibold uppercase tracking-wider px-3 py-1 bg-blue-50 text-blue-700 rounded-full">
           {meetingTypeLabel} Meeting Program
         </span>
-        <h1 className="text-2xl font-bold text-gray-900 mt-3">{formattedDate}</h1>
+        <h2 className="text-2xl font-bold text-gray-900 mt-3">{formattedDate}</h2>
       </div>
 
       <dl className="text-gray-800">
@@ -85,24 +85,34 @@ export default function MeetingDetail({ meeting }: MeetingDetailProps) {
         </ProgramRow>
 
         <ProgramRow label="Administration of the Sacrament:">
-          <div className="space-y-3">
-            <div>
-              <p className="font-medium text-gray-800">Blessed by:</p>
-              <ol className="list-decimal list-inside space-y-0.5">
-                {meeting.sacramentAdministration.blessedBy.map((name, index) => (
-                  <li key={`${name}-${index}`}>{name}</li>
-                ))}
-              </ol>
+          {meeting.sacramentAdministration &&
+          (meeting.sacramentAdministration.blessedBy?.length > 0 ||
+            meeting.sacramentAdministration.passedBy?.length > 0) ? (
+            <div className="space-y-3">
+              {meeting.sacramentAdministration.blessedBy?.length > 0 && (
+                <div>
+                  <p className="font-medium text-gray-800">Blessed by:</p>
+                  <ol className="list-decimal list-inside space-y-0.5">
+                    {meeting.sacramentAdministration.blessedBy.map((name, index) => (
+                      <li key={`${name}-${index}`}>{name}</li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+              {meeting.sacramentAdministration.passedBy?.length > 0 && (
+                <div>
+                  <p className="font-medium text-gray-800">Passed by:</p>
+                  <ol className="list-decimal list-inside space-y-0.5">
+                    {meeting.sacramentAdministration.passedBy.map((name, index) => (
+                      <li key={`${name}-${index}`}>{name}</li>
+                    ))}
+                  </ol>
+                </div>
+              )}
             </div>
-            <div>
-              <p className="font-medium text-gray-800">Passed by:</p>
-              <ol className="list-decimal list-inside space-y-0.5">
-                {meeting.sacramentAdministration.passedBy.map((name, index) => (
-                  <li key={`${name}-${index}`}>{name}</li>
-                ))}
-              </ol>
-            </div>
-          </div>
+          ) : (
+            <span className="italic text-gray-500">None</span>
+          )}
         </ProgramRow>
 
         <ProgramRow label="Speakers & Musical Numbers:">

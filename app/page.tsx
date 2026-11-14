@@ -48,19 +48,19 @@ export default function HomePage() {
       {/* Feature Highlights */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <h3 className="font-bold text-gray-900 mb-2">Typed Agendas</h3>
+          <h2 className="font-bold text-gray-900 mb-2">Typed Agendas</h2>
           <p className="text-sm text-gray-600">
             Robust data models tracking hymns, prayers, ward business, and speaker assignments cleanly.
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <h3 className="font-bold text-gray-900 mb-2">Automated Sunday Routing</h3>
+          <h2 className="font-bold text-gray-900 mb-2">Automated Sunday Routing</h2>
           <p className="text-sm text-gray-600">
             Dynamic date calculations automatically redirect members to the current week&apos;s sacrament program.
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <h3 className="font-bold text-gray-900 mb-2">Print-Ready Programs</h3>
+          <h2 className="font-bold text-gray-900 mb-2">Print-Ready Programs</h2>
           <p className="text-sm text-gray-600">
             Clean print views stripped of navigation elements, ready for distribution at the chapel door.
           </p>

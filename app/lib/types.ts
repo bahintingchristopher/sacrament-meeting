@@ -2,7 +2,8 @@ export type MeetingType =
   | 'testimony'
   | 'regular'
   | 'stake'
-  | 'general';
+  | 'general'
+  | 'special';
 
 export interface Hymn {
   number: number;
@@ -36,7 +37,7 @@ export interface SacramentMeeting {
   wardBusiness: WardBusinessItem[];
   stakeBusiness: boolean;
   sacramentHymn: Hymn;
-  sacramentAdministration: SacramentAdministration;
+  sacramentAdministration?: SacramentAdministration;
   speakers: SpeakerItem[];
   closingHymn: Hymn;
   closingPrayer: string;

@@ -13,7 +13,10 @@ export default function NavLinks() {
   ];
 
   return (
-    <nav className="bg-white border-b border-gray-200 shadow-sm">
+    <nav
+      aria-label="Main navigation"
+      className="bg-white border-b border-gray-200 shadow-sm"
+    >
       <div className="max-w-6xl mx-auto px-4 flex space-x-8">
         {links.map((link) => {
           const isActive = pathname === link.href;

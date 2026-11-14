@@ -17,7 +17,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
     );
   }
 
-  const meeting = getMeetingById(numericId);
+  const meeting = await getMeetingById(numericId);
 
   // Return 404 Not Found if meeting does not exist
   if (!meeting) {

@@ -22,9 +22,9 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
           </span>
           <span className="text-sm text-gray-500 font-medium">{formattedDate}</span>
         </div>
-        <h3 className="text-lg font-bold text-gray-900 mb-2">
+        <h2 className="text-lg font-bold text-gray-900 mb-2">
           Sacrament Meeting
-        </h3>
+        </h2>
         <div className="space-y-1 text-sm text-gray-600 mb-4">
           <p><span className="font-medium text-gray-700">Presiding:</span> {meeting.presiding}</p>
           <p><span className="font-medium text-gray-700">Conducting:</span> {meeting.conducting}</p>
@@ -36,7 +36,7 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
           className="inline-flex items-center bg-blue-600 text-white font-bold px-5 py-2.5 rounded-lg shadow-md hover:bg-blue-700 transition-colors cursor-pointer space-x-3"
         >
           <span className="text-lg tracking-wider">GO</span>
-          <div className="flex items-center -space-x-1.5">
+          <div aria-hidden="true" className="flex items-center -space-x-1.5">
             <svg
               className="w-5 h-5 text-white/70"
               fill="none"

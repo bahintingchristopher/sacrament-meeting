@@ -17,7 +17,7 @@ export default async function CurrentMeetingPage() {
   const sunday = new Date(today);
   sunday.setDate(today.getDate() - today.getDay());
 
-  const meetings = getMeetings();
+  const meetings = await getMeetings();
   const currentMeeting = meetings.find(
     (meeting) => meeting.date === toIsoDate(sunday)
   );
