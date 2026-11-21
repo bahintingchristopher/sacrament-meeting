@@ -10,6 +10,7 @@ export default function NavLinks() {
     { name: 'Home', href: '/' },
     { name: 'All Meetings', href: '/meetings' },
     { name: "Today's Program", href: '/meetings/current' },
+    { name: 'New Meeting', href: '/meetings/new' },
   ];
 
   return (

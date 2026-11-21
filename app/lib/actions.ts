@@ -36,6 +36,28 @@ const MeetingFormSchema = z.object({
 
 type MeetingFormValues = z.infer<typeof MeetingFormSchema>;
 
+export type State = {
+  errors?: {
+    date?: string[];
+    meetingType?: string[];
+    presiding?: string[];
+    conducting?: string[];
+    announcements?: string[];
+    openingHymnNumber?: string[];
+    openingHymnTitle?: string[];
+    openingPrayer?: string[];
+    wardBusiness?: string[];
+    stakeBusiness?: string[];
+    sacramentHymnNumber?: string[];
+    sacramentHymnTitle?: string[];
+    speakers?: string[];
+    closingHymnNumber?: string[];
+    closingHymnTitle?: string[];
+    closingPrayer?: string[];
+  };
+  message?: string | null;
+};
+
 function field(formData: FormData, name: string): string {
   const value = formData.get(name);
   return typeof value === 'string' ? value : '';
@@ -69,14 +91,27 @@ function textList(value: string): string[] {
     .filter(Boolean);
 }
 
-function jsonList<T>(raw: string): T[] {
-  if (!raw) return [];
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as T[]) : [];
-  } catch {
-    return [];
-  }
+function descriptionList(raw: string): WardBusinessItem[] {
+  return raw
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((description) => ({ description }));
+}
+
+function speakerList(raw: string): SpeakerItem[] {
+  return raw
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [name, ...rest] = line.split('|').map((part) => part.trim());
+      return {
+        name,
+        topic: rest.join(' | '),
+        type: 'speaker',
+      };
+    });
 }
 
 function hymn(numberValue: string, title: string): Hymn {
@@ -98,44 +133,57 @@ function meetingInputFromValues(
     announcements: textList(data.announcements ?? ''),
     openingHymn: hymn(data.openingHymnNumber, data.openingHymnTitle),
     openingPrayer: data.openingPrayer,
-    wardBusiness: jsonList<WardBusinessItem>(data.wardBusiness ?? ''),
+    wardBusiness: descriptionList(data.wardBusiness ?? ''),
     stakeBusiness: ['on', 'true', '1'].includes(
       (data.stakeBusiness ?? '').toLowerCase()
     ),
     sacramentHymn: hymn(data.sacramentHymnNumber, data.sacramentHymnTitle),
-    speakers: jsonList<SpeakerItem>(data.speakers ?? ''),
+    speakers: speakerList(data.speakers ?? ''),
     closingHymn: hymn(data.closingHymnNumber, data.closingHymnTitle),
     closingPrayer: data.closingPrayer,
   };
 }
 
-export async function createMeeting(formData: FormData) {
+export async function createMeeting(
+  prevState: State,
+  formData: FormData
+): Promise<State> {
   const parsed = MeetingFormSchema.safeParse(meetingFormValues(formData));
   if (!parsed.success) {
-    throw new Error('Invalid meeting input.');
+    return {
+      errors: parsed.error.flatten().fieldErrors,
+      message: 'Missing or invalid fields. Failed to create meeting.',
+    };
   }
 
   try {
     await addMeeting(meetingInputFromValues(parsed.data));
   } catch (error) {
     console.error('Error creating meeting:', error);
-    throw new Error('Failed to create meeting. Please try again later.');
+    return { message: 'Database Error: Failed to create meeting.' };
   }
   revalidatePath('/meetings');
   redirect('/meetings');
 }
 
-export async function updateMeeting(id: string, formData: FormData) {
+export async function updateMeeting(
+  id: string,
+  prevState: State,
+  formData: FormData
+): Promise<State> {
   const parsed = MeetingFormSchema.safeParse(meetingFormValues(formData));
   if (!parsed.success) {
-    throw new Error('Invalid meeting input.');
+    return {
+      errors: parsed.error.flatten().fieldErrors,
+      message: 'Missing or invalid fields. Failed to update meeting.',
+    };
   }
 
   try {
     await updateMeetingRecord(Number(id), meetingInputFromValues(parsed.data));
   } catch (error) {
     console.error('Error updating meeting:', error);
-    throw new Error('Failed to update meeting. Please try again later.');
+    return { message: 'Database Error: Failed to update meeting.' };
   }
   revalidatePath('/meetings');
   redirect('/meetings');
