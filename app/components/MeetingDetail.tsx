@@ -75,10 +75,11 @@ export default function MeetingDetail({ meeting }: MeetingDetailProps) {
           ) : (
             <span className="italic text-gray-500">None</span>
           )}
-          {meeting.stakeBusiness && (
-            <p className="mt-1 text-sm font-medium text-blue-600">Includes Stake Business</p>
-          )}
         </ProgramRow>
+
+        {meeting.stakeBusiness && (
+          <ProgramRow label="Stake Business:">{null}</ProgramRow>
+        )}
 
         <ProgramRow label="Sacrament Hymn:">
           #{meeting.sacramentHymn.number} — {meeting.sacramentHymn.title}
