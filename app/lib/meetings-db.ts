@@ -5,6 +5,43 @@ const sql = neon(process.env.DATABASE_URL!);
 
 const ITEMS_PER_PAGE = 5;
 
+const MEETING_COLUMNS = `
+  id,
+  to_char(date, 'YYYY-MM-DD') AS "date",
+  meeting_type                AS "meetingType",
+  presiding, conducting, announcements,
+  opening_hymn                AS "openingHymn",
+  opening_prayer              AS "openingPrayer",
+  ward_business               AS "wardBusiness",
+  stake_business              AS "stakeBusiness",
+  sacrament_hymn              AS "sacramentHymn",
+  speakers,
+  closing_hymn                AS "closingHymn",
+  closing_prayer              AS "closingPrayer"
+`;
+
+interface UpdateField {
+  key: keyof SacramentMeeting;
+  column: string;
+  format?: 'json' | 'array';
+}
+
+const UPDATE_FIELDS: UpdateField[] = [
+  { key: 'date', column: 'date' },
+  { key: 'meetingType', column: 'meeting_type' },
+  { key: 'presiding', column: 'presiding' },
+  { key: 'conducting', column: 'conducting' },
+  { key: 'announcements', column: 'announcements', format: 'array' },
+  { key: 'openingHymn', column: 'opening_hymn', format: 'json' },
+  { key: 'openingPrayer', column: 'opening_prayer' },
+  { key: 'wardBusiness', column: 'ward_business', format: 'json' },
+  { key: 'stakeBusiness', column: 'stake_business' },
+  { key: 'sacramentHymn', column: 'sacrament_hymn', format: 'json' },
+  { key: 'speakers', column: 'speakers', format: 'json' },
+  { key: 'closingHymn', column: 'closing_hymn', format: 'json' },
+  { key: 'closingPrayer', column: 'closing_prayer' },
+];
+
 export async function getMeetings(
   query: string = '',
   currentPage: number = 1
@@ -75,20 +112,75 @@ export async function getMeetingById(
   return (rows[0] as unknown as SacramentMeeting) ?? null;
 }
 
-// Mutation stubs — will be wired to the database in Week 04
 export async function addMeeting(
   data: Omit<SacramentMeeting, 'id'>
 ): Promise<SacramentMeeting> {
-  throw new Error('addMeeting: database implementation coming in Week 04');
+  const rows = await sql`
+    INSERT INTO meetings (
+      date, meeting_type, presiding, conducting, announcements,
+      opening_hymn, opening_prayer, ward_business, stake_business,
+      sacrament_hymn, speakers, closing_hymn, closing_prayer
+    )
+    VALUES (
+      ${data.date},
+      ${data.meetingType},
+      ${data.presiding},
+      ${data.conducting},
+      ${data.announcements ?? []}::text[],
+      ${JSON.stringify(data.openingHymn)}::jsonb,
+      ${data.openingPrayer},
+      ${JSON.stringify(data.wardBusiness ?? [])}::jsonb,
+      ${data.stakeBusiness ?? false},
+      ${JSON.stringify(data.sacramentHymn)}::jsonb,
+      ${JSON.stringify(data.speakers ?? [])}::jsonb,
+      ${JSON.stringify(data.closingHymn)}::jsonb,
+      ${data.closingPrayer}
+    )
+    RETURNING ${sql.unsafe(MEETING_COLUMNS)}
+  `;
+  return rows[0] as unknown as SacramentMeeting;
 }
 
 export async function updateMeeting(
   id: number,
   updates: Partial<SacramentMeeting>
 ): Promise<SacramentMeeting | null> {
-  throw new Error('updateMeeting: database implementation coming in Week 04');
+  const sets: string[] = [];
+  const values: unknown[] = [];
+
+  for (const field of UPDATE_FIELDS) {
+    if (!(field.key in updates)) continue;
+    const value = (updates as Record<string, unknown>)[field.key];
+    if (value === undefined) continue;
+
+    values.push(field.format === 'json' ? JSON.stringify(value) : value);
+    const cast =
+      field.format === 'json'
+        ? '::jsonb'
+        : field.format === 'array'
+          ? '::text[]'
+          : '';
+    sets.push(`${field.column} = $${values.length}${cast}`);
+  }
+
+  if (sets.length === 0) {
+    return getMeetingById(id);
+  }
+
+  values.push(id);
+  const rows = await sql.query(
+    `UPDATE meetings
+     SET ${sets.join(', ')}
+     WHERE id = $${values.length}
+     RETURNING ${MEETING_COLUMNS}`,
+    values
+  );
+  return (rows[0] as unknown as SacramentMeeting) ?? null;
 }
 
 export async function deleteMeeting(id: number): Promise<boolean> {
-  throw new Error('deleteMeeting: database implementation coming in Week 04');
+  const rows = await sql`
+    DELETE FROM meetings WHERE id = ${id} RETURNING id
+  `;
+  return rows.length > 0;
 }

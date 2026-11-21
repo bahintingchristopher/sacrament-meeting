@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { deleteMeeting } from '@/app/lib/actions';
 import type { SacramentMeeting } from '@/app/lib/types';
 
 interface MeetingCardProps {
@@ -6,6 +7,8 @@ interface MeetingCardProps {
 }
 
 export default function MeetingCard({ meeting }: MeetingCardProps) {
+  const deleteMeetingWithId = deleteMeeting.bind(null, String(meeting.id));
+
   const formattedDate = new Date(meeting.date + 'T00:00:00').toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
@@ -30,7 +33,7 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
           <p><span className="font-medium text-gray-700">Conducting:</span> {meeting.conducting}</p>
         </div>
       </div>
-      <div className="pt-4 border-t border-gray-100 flex justify-end">
+      <div className="pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
         <Link
           href={`/meetings/${meeting.id}`}
           className="inline-flex items-center bg-blue-600 text-white font-bold px-5 py-2.5 rounded-lg shadow-md hover:bg-blue-700 transition-colors cursor-pointer space-x-3"
@@ -59,6 +62,14 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
             </svg>
           </div>
         </Link>
+        <form action={deleteMeetingWithId}>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-white border border-red-300 text-red-600 text-sm font-semibold rounded-lg hover:bg-red-50 transition-colors"
+          >
+            Delete
+          </button>
+        </form>
       </div>
     </div>
   );
