@@ -4,14 +4,26 @@ import { Suspense } from 'react';
 import './globals.css';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer';
-import NavLinks from '@/app/components/NavLinks';
+import AuthNav from '@/app/components/AuthNav';
 
 // Load the Google Font with optimization
 const inter = Inter({ subsets: ['latin'] });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+
 export const metadata: Metadata = {
-  title: 'Sacrament Meeting Planner',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'Sacrament Meeting Planner',
+    template: '%s | Sacrament Meeting Planner',
+  },
   description: 'Plan, review, and print sacrament meeting programs.',
+  openGraph: {
+    type: 'website',
+    siteName: 'Sacrament Meeting Planner',
+    title: 'Sacrament Meeting Planner',
+    description: 'Plan, review, and print sacrament meeting programs.',
+  },
 };
 
 export default function RootLayout({
@@ -33,7 +45,7 @@ export default function RootLayout({
             </nav>
           }
         >
-          <NavLinks />
+          <AuthNav />
         </Suspense>
         <main className="flex-grow max-w-6xl w-full mx-auto px-4 py-8">
           {children}
