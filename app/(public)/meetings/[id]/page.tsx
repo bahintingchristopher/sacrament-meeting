@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import MeetingDetail from '@/app/components/MeetingDetail';
 import PrintButton from '@/app/components/PrintButton';
 import { fetchMeetingById } from '@/app/lib/api';
+import { getLeaderSession } from '@/app/lib/dal';
 
 export const instant = false;
 
@@ -46,6 +47,8 @@ function MeetingProgramSkeleton() {
 
 export default async function MeetingDetailPage({ params }: PageProps) {
   const { id } = await params;
+  const leader = await getLeaderSession();
+  const canManage = !!leader;
 
   return (
     <div className="space-y-6">
@@ -79,12 +82,14 @@ export default async function MeetingDetailPage({ params }: PageProps) {
           <span>BACK TO ALL</span>
         </Link>
         <div className="flex items-center gap-3">
-          <Link
-            href={`/meetings/${id}/edit`}
-            className="px-4 py-2 bg-white border border-blue-600 text-blue-700 text-sm font-semibold rounded-lg hover:bg-blue-50 transition-colors"
-          >
-            Edit
-          </Link>
+          {canManage && (
+            <Link
+              href={`/meetings/${id}/edit`}
+              className="px-4 py-2 bg-white border border-blue-600 text-blue-700 text-sm font-semibold rounded-lg hover:bg-blue-50 transition-colors"
+            >
+              Edit
+            </Link>
+          )}
           <PrintButton />
         </div>
       </div>

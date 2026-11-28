@@ -14,6 +14,7 @@ import type {
   SpeakerItem,
   WardBusinessItem,
 } from './types';
+import { requireLeaderSession } from './dal';
 
 const MeetingFormSchema = z.object({
   date: z.string().min(1, 'Date is required.'),
@@ -148,6 +149,8 @@ export async function createMeeting(
   prevState: State,
   formData: FormData
 ): Promise<State> {
+  await requireLeaderSession();
+
   const parsed = MeetingFormSchema.safeParse(meetingFormValues(formData));
   if (!parsed.success) {
     return {
@@ -171,6 +174,8 @@ export async function updateMeeting(
   prevState: State,
   formData: FormData
 ): Promise<State> {
+  await requireLeaderSession();
+
   const parsed = MeetingFormSchema.safeParse(meetingFormValues(formData));
   if (!parsed.success) {
     return {
@@ -190,6 +195,8 @@ export async function updateMeeting(
 }
 
 export async function deleteMeeting(id: string) {
+  await requireLeaderSession();
+
   try {
     await deleteMeetingRecord(Number(id));
   } catch (error) {

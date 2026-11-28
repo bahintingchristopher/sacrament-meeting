@@ -1,12 +1,14 @@
 import Link from 'next/link';
 import { deleteMeeting } from '@/app/lib/actions';
+import DeleteMeetingButton from '@/app/components/DeleteMeetingButton';
 import type { SacramentMeeting } from '@/app/lib/types';
 
 interface MeetingCardProps {
   meeting: SacramentMeeting;
+  canManage?: boolean;
 }
 
-export default function MeetingCard({ meeting }: MeetingCardProps) {
+export default function MeetingCard({ meeting, canManage = false }: MeetingCardProps) {
   const deleteMeetingWithId = deleteMeeting.bind(null, String(meeting.id));
 
   const formattedDate = new Date(meeting.date + 'T00:00:00').toLocaleDateString('en-US', {
@@ -62,14 +64,13 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
             </svg>
           </div>
         </Link>
-        <form action={deleteMeetingWithId}>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-white border border-red-300 text-red-600 text-sm font-semibold rounded-lg hover:bg-red-50 transition-colors"
-          >
-            Delete
-          </button>
-        </form>
+        {canManage && (
+          <DeleteMeetingButton
+            action={deleteMeetingWithId}
+            meetingId={String(meeting.id)}
+            meetingLabel={formattedDate}
+          />
+        )}
       </div>
     </div>
   );

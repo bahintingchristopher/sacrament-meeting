@@ -1,7 +1,21 @@
+import type { Metadata } from 'next';
 import { getMeetings, getMeetingsTotalPages } from '@/app/lib/meetings-db';
 import MeetingSearch from '@/app/components/MeetingSearch';
 import MeetingCard from '@/app/components/MeetingCard';
 import Pagination from '@/app/components/Pagination';
+import { getLeaderSession } from '@/app/lib/dal';
+
+export const instant = false;
+
+export const metadata: Metadata = {
+  title: 'Meeting Schedule',
+  description: 'Browse upcoming and past sacrament meeting schedules and programs.',
+  openGraph: {
+    title: 'Meeting Schedule',
+    description: 'Browse upcoming and past sacrament meeting schedules and programs.',
+    images: ['/opengraph-image.jpg'],
+  },
+};
 
 export default async function MeetingsPage(props: {
   searchParams?: Promise<{ query?: string; page?: string }>;
@@ -10,10 +24,13 @@ export default async function MeetingsPage(props: {
   const query = searchParams?.query ?? '';
   const currentPage = Number(searchParams?.page) || 1;
 
-  const [meetings, totalPages] = await Promise.all([
+  const [meetings, totalPages, leader] = await Promise.all([
     getMeetings(query, currentPage),
     getMeetingsTotalPages(query),
+    getLeaderSession(),
   ]);
+
+  const canManage = !!leader;
 
   return (
     <div className="space-y-6">
@@ -29,7 +46,7 @@ export default async function MeetingsPage(props: {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {meetings.map((meeting) => (
-            <MeetingCard key={meeting.id} meeting={meeting} />
+            <MeetingCard key={meeting.id} meeting={meeting} canManage={canManage} />
           ))}
         </div>
       )}
