@@ -29,6 +29,7 @@ export default function MeetingDetail({ meeting }: MeetingDetailProps) {
 
   const meetingTypeLabel =
     meeting.meetingType.charAt(0).toUpperCase() + meeting.meetingType.slice(1);
+  const administration = meeting.sacramentAdministration;
 
   return (
     <div className="bg-white shadow rounded-lg border border-gray-200 p-8 max-w-3xl mx-auto print:shadow-none print:border-none print:p-0">
@@ -86,34 +87,28 @@ export default function MeetingDetail({ meeting }: MeetingDetailProps) {
         </ProgramRow>
 
         <ProgramRow label="Administration of the Sacrament:">
-          {meeting.sacramentAdministration &&
-          (meeting.sacramentAdministration.blessedBy?.length > 0 ||
-            meeting.sacramentAdministration.passedBy?.length > 0) ? (
-            <div className="space-y-3">
-              {meeting.sacramentAdministration.blessedBy?.length > 0 && (
-                <div>
-                  <p className="font-medium text-gray-800">Blessed by:</p>
-                  <ol className="list-decimal list-inside space-y-0.5">
-                    {meeting.sacramentAdministration.blessedBy.map((name, index) => (
-                      <li key={`${name}-${index}`}>{name}</li>
-                    ))}
-                  </ol>
-                </div>
-              )}
-              {meeting.sacramentAdministration.passedBy?.length > 0 && (
-                <div>
-                  <p className="font-medium text-gray-800">Passed by:</p>
-                  <ol className="list-decimal list-inside space-y-0.5">
-                    {meeting.sacramentAdministration.passedBy.map((name, index) => (
-                      <li key={`${name}-${index}`}>{name}</li>
-                    ))}
-                  </ol>
-                </div>
-              )}
+          <div className="space-y-3">
+            <div>
+              <p className="font-medium text-gray-800">Bless by:</p>
+              <ol className="list-decimal list-inside space-y-0.5">
+                {Array.from({ length: 2 }, (_, index) => (
+                  <li key={`bless-${index}`}>
+                    {administration?.blessedBy[index]?.trim() || '\u00A0'}
+                  </li>
+                ))}
+              </ol>
             </div>
-          ) : (
-            <span className="italic text-gray-500">None</span>
-          )}
+            <div>
+              <p className="font-medium text-gray-800">Pass by:</p>
+              <ol className="list-decimal list-inside space-y-0.5">
+                {Array.from({ length: 4 }, (_, index) => (
+                  <li key={`pass-${index}`}>
+                    {administration?.passedBy[index]?.trim() || '\u00A0'}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
         </ProgramRow>
 
         <ProgramRow label="Speakers & Musical Numbers:">

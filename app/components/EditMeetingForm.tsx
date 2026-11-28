@@ -5,6 +5,8 @@ import { updateMeeting, type State } from '@/app/lib/actions';
 import type { SacramentMeeting } from '@/app/lib/types';
 
 const meetingTypes = ['testimony', 'regular', 'stake', 'general', 'special'];
+const blessFields = ['blessBy1', 'blessBy2'] as const;
+const passFields = ['passBy1', 'passBy2', 'passBy3', 'passBy4'] as const;
 
 const initialState: State = { message: null, errors: {} };
 
@@ -187,6 +189,54 @@ export default function EditMeetingForm({
             {state.errors?.sacramentHymnTitle?.map((error) => <p key={error}>{error}</p>)}
           </div>
         </div>
+
+        <fieldset className="md:col-span-2 border border-gray-200 rounded-lg p-4">
+          <legend className="px-1 text-sm font-semibold text-gray-800">
+            Administration of the Sacrament
+          </legend>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm font-medium text-gray-700 mb-2">Bless by</p>
+              {blessFields.map((name, index) => (
+                <div key={name} className="mb-2">
+                  <label htmlFor={name} className="block text-xs text-gray-600 mb-1">
+                    {index + 1}.
+                  </label>
+                  <input
+                    id={name}
+                    name={name}
+                    aria-describedby={`${name}-error`}
+                    defaultValue={meeting.sacramentAdministration?.blessedBy[index] ?? ''}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  />
+                  <div id={`${name}-error`} aria-live="polite" aria-atomic="true" className="mt-1 text-sm text-red-600">
+                    {state.errors?.[name]?.map((error) => <p key={error}>{error}</p>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-700 mb-2">Pass by</p>
+              {passFields.map((name, index) => (
+                <div key={name} className="mb-2">
+                  <label htmlFor={name} className="block text-xs text-gray-600 mb-1">
+                    {index + 1}.
+                  </label>
+                  <input
+                    id={name}
+                    name={name}
+                    aria-describedby={`${name}-error`}
+                    defaultValue={meeting.sacramentAdministration?.passedBy[index] ?? ''}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  />
+                  <div id={`${name}-error`} aria-live="polite" aria-atomic="true" className="mt-1 text-sm text-red-600">
+                    {state.errors?.[name]?.map((error) => <p key={error}>{error}</p>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </fieldset>
 
         <div>
           <label htmlFor="closingHymnNumber" className="block text-sm font-medium text-gray-700 mb-1">

@@ -10,6 +10,7 @@ import {
 } from './meetings-db';
 import type {
   Hymn,
+  SacramentAdministration,
   SacramentMeeting,
   SpeakerItem,
   WardBusinessItem,
@@ -29,6 +30,12 @@ const MeetingFormSchema = z.object({
   stakeBusiness: z.string().optional().default(''),
   sacramentHymnNumber: z.string().min(1, 'Sacrament hymn number is required.'),
   sacramentHymnTitle: z.string().min(1, 'Sacrament hymn title is required.'),
+  blessBy1: z.string().optional().default(''),
+  blessBy2: z.string().optional().default(''),
+  passBy1: z.string().optional().default(''),
+  passBy2: z.string().optional().default(''),
+  passBy3: z.string().optional().default(''),
+  passBy4: z.string().optional().default(''),
   speakers: z.string().optional().default(''),
   closingHymnNumber: z.string().min(1, 'Closing hymn number is required.'),
   closingHymnTitle: z.string().min(1, 'Closing hymn title is required.'),
@@ -51,6 +58,12 @@ export type State = {
     stakeBusiness?: string[];
     sacramentHymnNumber?: string[];
     sacramentHymnTitle?: string[];
+    blessBy1?: string[];
+    blessBy2?: string[];
+    passBy1?: string[];
+    passBy2?: string[];
+    passBy3?: string[];
+    passBy4?: string[];
     speakers?: string[];
     closingHymnNumber?: string[];
     closingHymnTitle?: string[];
@@ -78,6 +91,12 @@ function meetingFormValues(formData: FormData): MeetingFormValues {
     stakeBusiness: field(formData, 'stakeBusiness'),
     sacramentHymnNumber: field(formData, 'sacramentHymnNumber'),
     sacramentHymnTitle: field(formData, 'sacramentHymnTitle'),
+    blessBy1: field(formData, 'blessBy1'),
+    blessBy2: field(formData, 'blessBy2'),
+    passBy1: field(formData, 'passBy1'),
+    passBy2: field(formData, 'passBy2'),
+    passBy3: field(formData, 'passBy3'),
+    passBy4: field(formData, 'passBy4'),
     speakers: field(formData, 'speakers'),
     closingHymnNumber: field(formData, 'closingHymnNumber'),
     closingHymnTitle: field(formData, 'closingHymnTitle'),
@@ -123,6 +142,22 @@ function hymn(numberValue: string, title: string): Hymn {
   };
 }
 
+function sacramentAdministration(
+  data: MeetingFormValues
+): SacramentAdministration {
+  return {
+    blessedBy: [data.blessBy1 ?? '', data.blessBy2 ?? ''].map((name) =>
+      name.trim()
+    ),
+    passedBy: [
+      data.passBy1 ?? '',
+      data.passBy2 ?? '',
+      data.passBy3 ?? '',
+      data.passBy4 ?? '',
+    ].map((name) => name.trim()),
+  };
+}
+
 function meetingInputFromValues(
   data: MeetingFormValues
 ): Omit<SacramentMeeting, 'id'> {
@@ -139,6 +174,7 @@ function meetingInputFromValues(
       (data.stakeBusiness ?? '').toLowerCase()
     ),
     sacramentHymn: hymn(data.sacramentHymnNumber, data.sacramentHymnTitle),
+    sacramentAdministration: sacramentAdministration(data),
     speakers: speakerList(data.speakers ?? ''),
     closingHymn: hymn(data.closingHymnNumber, data.closingHymnTitle),
     closingPrayer: data.closingPrayer,

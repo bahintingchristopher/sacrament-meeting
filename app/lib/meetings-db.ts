@@ -15,6 +15,7 @@ const MEETING_COLUMNS = `
   ward_business               AS "wardBusiness",
   stake_business              AS "stakeBusiness",
   sacrament_hymn              AS "sacramentHymn",
+  sacrament_administration    AS "sacramentAdministration",
   speakers,
   closing_hymn                AS "closingHymn",
   closing_prayer              AS "closingPrayer"
@@ -37,6 +38,11 @@ const UPDATE_FIELDS: UpdateField[] = [
   { key: 'wardBusiness', column: 'ward_business', format: 'json' },
   { key: 'stakeBusiness', column: 'stake_business' },
   { key: 'sacramentHymn', column: 'sacrament_hymn', format: 'json' },
+  {
+    key: 'sacramentAdministration',
+    column: 'sacrament_administration',
+    format: 'json',
+  },
   { key: 'speakers', column: 'speakers', format: 'json' },
   { key: 'closingHymn', column: 'closing_hymn', format: 'json' },
   { key: 'closingPrayer', column: 'closing_prayer' },
@@ -60,6 +66,7 @@ export async function getMeetings(
       ward_business               AS "wardBusiness",
       stake_business              AS "stakeBusiness",
       sacrament_hymn              AS "sacramentHymn",
+      sacrament_administration    AS "sacramentAdministration",
       speakers,
       closing_hymn                AS "closingHymn",
       closing_prayer              AS "closingPrayer"
@@ -104,6 +111,7 @@ export async function getMeetingById(
       ward_business               AS "wardBusiness",
       stake_business              AS "stakeBusiness",
       sacrament_hymn              AS "sacramentHymn",
+      sacrament_administration    AS "sacramentAdministration",
       speakers,
       closing_hymn                AS "closingHymn",
       closing_prayer              AS "closingPrayer"
@@ -119,7 +127,8 @@ export async function addMeeting(
     INSERT INTO meetings (
       date, meeting_type, presiding, conducting, announcements,
       opening_hymn, opening_prayer, ward_business, stake_business,
-      sacrament_hymn, speakers, closing_hymn, closing_prayer
+      sacrament_hymn, sacrament_administration, speakers,
+      closing_hymn, closing_prayer
     )
     VALUES (
       ${data.date},
@@ -132,6 +141,9 @@ export async function addMeeting(
       ${JSON.stringify(data.wardBusiness ?? [])}::jsonb,
       ${data.stakeBusiness ?? false},
       ${JSON.stringify(data.sacramentHymn)}::jsonb,
+      ${JSON.stringify(
+        data.sacramentAdministration ?? { blessedBy: [], passedBy: [] }
+      )}::jsonb,
       ${JSON.stringify(data.speakers ?? [])}::jsonb,
       ${JSON.stringify(data.closingHymn)}::jsonb,
       ${data.closingPrayer}
