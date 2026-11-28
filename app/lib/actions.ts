@@ -37,6 +37,7 @@ const MeetingFormSchema = z.object({
   passBy3: z.string().optional().default(''),
   passBy4: z.string().optional().default(''),
   speakers: z.string().optional().default(''),
+  concludingSpeaker: z.string().optional().default(''),
   closingHymnNumber: z.string().min(1, 'Closing hymn number is required.'),
   closingHymnTitle: z.string().min(1, 'Closing hymn title is required.'),
   closingPrayer: z.string().min(2, 'Closing prayer is required.'),
@@ -65,6 +66,7 @@ export type State = {
     passBy3?: string[];
     passBy4?: string[];
     speakers?: string[];
+    concludingSpeaker?: string[];
     closingHymnNumber?: string[];
     closingHymnTitle?: string[];
     closingPrayer?: string[];
@@ -98,6 +100,7 @@ function meetingFormValues(formData: FormData): MeetingFormValues {
     passBy3: field(formData, 'passBy3'),
     passBy4: field(formData, 'passBy4'),
     speakers: field(formData, 'speakers'),
+    concludingSpeaker: field(formData, 'concludingSpeaker'),
     closingHymnNumber: field(formData, 'closingHymnNumber'),
     closingHymnTitle: field(formData, 'closingHymnTitle'),
     closingPrayer: field(formData, 'closingPrayer'),
@@ -176,6 +179,7 @@ function meetingInputFromValues(
     sacramentHymn: hymn(data.sacramentHymnNumber, data.sacramentHymnTitle),
     sacramentAdministration: sacramentAdministration(data),
     speakers: speakerList(data.speakers ?? ''),
+    concludingSpeaker: (data.concludingSpeaker ?? '').trim(),
     closingHymn: hymn(data.closingHymnNumber, data.closingHymnTitle),
     closingPrayer: data.closingPrayer,
   };

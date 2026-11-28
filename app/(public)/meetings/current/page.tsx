@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 import { connection } from 'next/server';
 import { getMeetings } from '@/app/lib/meetings-db';
 
+export const instant = false;
+
 function toIsoDate(date: Date): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');

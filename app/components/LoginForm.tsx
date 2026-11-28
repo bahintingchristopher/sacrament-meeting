@@ -3,7 +3,11 @@
 import { useActionState } from 'react';
 import { authenticate } from '@/app/lib/auth-actions';
 
-export default function LoginForm() {
+export default function LoginForm({
+  redirectTo = '/meetings',
+}: {
+  redirectTo?: string;
+}) {
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined,
@@ -11,7 +15,7 @@ export default function LoginForm() {
 
   return (
     <form action={formAction} className="space-y-5">
-      <input type="hidden" name="redirectTo" value="/meetings" />
+      <input type="hidden" name="redirectTo" value={redirectTo} />
 
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">

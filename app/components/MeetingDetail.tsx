@@ -44,27 +44,22 @@ export default function MeetingDetail({ meeting }: MeetingDetailProps) {
         <ProgramRow label="Presiding:">{meeting.presiding}</ProgramRow>
 
         <ProgramRow label="Conducting:">{meeting.conducting}</ProgramRow>
-      </dl>
 
-      {meeting.announcements && meeting.announcements.length > 0 && (
-        <div className="my-6 bg-blue-50/50 border border-blue-100 rounded-lg p-4 print:break-inside-avoid">
-          <h3 className="text-sm font-bold text-blue-900 uppercase tracking-wide mb-2">
-            Ward Announcements:
-          </h3>
-          <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-            {meeting.announcements.map((announcement, index) => (
-              <li key={`${announcement}-${index}`}>{announcement}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+        <ProgramRow label="Announcement:">
+          {meeting.announcements && meeting.announcements.length > 0 ? (
+            <ul className="list-disc list-inside space-y-1">
+              {meeting.announcements.map((announcement, index) => (
+                <li key={`${announcement}-${index}`}>{announcement}</li>
+              ))}
+            </ul>
+          ) : (
+            '\u00A0'
+          )}
+        </ProgramRow>
 
-      <dl className="text-gray-800">
         <ProgramRow label="Opening Hymn:">
           #{meeting.openingHymn.number} — {meeting.openingHymn.title}
         </ProgramRow>
-
-        <ProgramRow label="Opening Prayer:">{meeting.openingPrayer}</ProgramRow>
 
         <ProgramRow label="Ward Business:">
           {meeting.wardBusiness && meeting.wardBusiness.length > 0 ? (
@@ -78,9 +73,11 @@ export default function MeetingDetail({ meeting }: MeetingDetailProps) {
           )}
         </ProgramRow>
 
-        {meeting.stakeBusiness && (
-          <ProgramRow label="Stake Business:">{null}</ProgramRow>
-        )}
+        <ProgramRow label="Stake Business:">
+          {meeting.stakeBusiness ? 'Yes' : '\u00A0'}
+        </ProgramRow>
+
+        <ProgramRow label="Opening Prayer:">{meeting.openingPrayer}</ProgramRow>
 
         <ProgramRow label="Sacrament Hymn:">
           #{meeting.sacramentHymn.number} — {meeting.sacramentHymn.title}
@@ -111,7 +108,7 @@ export default function MeetingDetail({ meeting }: MeetingDetailProps) {
           </div>
         </ProgramRow>
 
-        <ProgramRow label="Speakers & Musical Numbers:">
+        <ProgramRow label="Speakers:">
           {meeting.speakers.length > 0 ? (
             <div className="space-y-2">
               {meeting.speakers.map((speaker, index) => (
@@ -134,6 +131,10 @@ export default function MeetingDetail({ meeting }: MeetingDetailProps) {
           ) : (
             <span className="italic text-gray-500">None</span>
           )}
+        </ProgramRow>
+
+        <ProgramRow label="Concluding Speaker:">
+          {meeting.concludingSpeaker?.trim() || '\u00A0'}
         </ProgramRow>
 
         <ProgramRow label="Closing Hymn:">

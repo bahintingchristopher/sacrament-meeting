@@ -17,6 +17,7 @@ const MEETING_COLUMNS = `
   sacrament_hymn              AS "sacramentHymn",
   sacrament_administration    AS "sacramentAdministration",
   speakers,
+  concluding_speaker          AS "concludingSpeaker",
   closing_hymn                AS "closingHymn",
   closing_prayer              AS "closingPrayer"
 `;
@@ -44,6 +45,7 @@ const UPDATE_FIELDS: UpdateField[] = [
     format: 'json',
   },
   { key: 'speakers', column: 'speakers', format: 'json' },
+  { key: 'concludingSpeaker', column: 'concluding_speaker' },
   { key: 'closingHymn', column: 'closing_hymn', format: 'json' },
   { key: 'closingPrayer', column: 'closing_prayer' },
 ];
@@ -68,6 +70,7 @@ export async function getMeetings(
       sacrament_hymn              AS "sacramentHymn",
       sacrament_administration    AS "sacramentAdministration",
       speakers,
+      concluding_speaker          AS "concludingSpeaker",
       closing_hymn                AS "closingHymn",
       closing_prayer              AS "closingPrayer"
     FROM meetings
@@ -113,6 +116,7 @@ export async function getMeetingById(
       sacrament_hymn              AS "sacramentHymn",
       sacrament_administration    AS "sacramentAdministration",
       speakers,
+      concluding_speaker          AS "concludingSpeaker",
       closing_hymn                AS "closingHymn",
       closing_prayer              AS "closingPrayer"
     FROM meetings WHERE id = ${id}
@@ -127,7 +131,7 @@ export async function addMeeting(
     INSERT INTO meetings (
       date, meeting_type, presiding, conducting, announcements,
       opening_hymn, opening_prayer, ward_business, stake_business,
-      sacrament_hymn, sacrament_administration, speakers,
+      sacrament_hymn, sacrament_administration, speakers, concluding_speaker,
       closing_hymn, closing_prayer
     )
     VALUES (
@@ -145,6 +149,7 @@ export async function addMeeting(
         data.sacramentAdministration ?? { blessedBy: [], passedBy: [] }
       )}::jsonb,
       ${JSON.stringify(data.speakers ?? [])}::jsonb,
+      ${data.concludingSpeaker ?? ''},
       ${JSON.stringify(data.closingHymn)}::jsonb,
       ${data.closingPrayer}
     )

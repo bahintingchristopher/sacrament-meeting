@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import LoginForm from '@/app/components/LoginForm';
 
+export const instant = false;
+
 export const metadata: Metadata = {
   title: 'Bishopric Sign In',
   description: 'Sign in to manage the sacrament meeting schedule and program details.',
@@ -11,7 +13,39 @@ export const metadata: Metadata = {
   },
 };
 
-export default function LoginPage() {
+function safeRedirectPath(raw: string | string[] | undefined): string {
+  const value = Array.isArray(raw) ? raw[0] : raw;
+
+  if (!value) {
+    return '/meetings';
+  }
+
+  if (value.startsWith('/') && !value.startsWith('//')) {
+    return value;
+  }
+
+  try {
+    const url = new URL(value);
+    const path = `${url.pathname}${url.search}${url.hash}`;
+
+    if (path && !path.startsWith('//')) {
+      return path;
+    }
+  } catch {
+    return '/meetings';
+  }
+
+  return '/meetings';
+}
+
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackUrl?: string | string[] }>;
+}) {
+  const { callbackUrl } = await searchParams;
+  const redirectTo = safeRedirectPath(callbackUrl);
+
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-md bg-white rounded-lg border border-gray-200 shadow-sm p-8">
@@ -19,7 +53,7 @@ export default function LoginPage() {
         <p className="text-sm text-gray-600 mt-2 mb-8">
           Sign in with your bishopric, clerk, or executive secretary account to manage meeting programs.
         </p>
-        <LoginForm />
+        <LoginForm redirectTo={redirectTo} />
         <p className="mt-6 text-sm text-gray-500">
           <Link href="/" className="text-blue-700 hover:underline">
             Return to the home page

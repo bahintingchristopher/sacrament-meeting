@@ -28,5 +28,5 @@ export default async function AuthNav() {
     </Link>
   );
 
-  return <NavLinks isAuthenticated={isAuthenticated} authSlot={authSlot} />;
+  return <NavLinks authSlot={authSlot} />;
 }

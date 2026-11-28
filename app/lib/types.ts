@@ -39,6 +39,7 @@ export interface SacramentMeeting {
   sacramentHymn: Hymn;
   sacramentAdministration?: SacramentAdministration;
   speakers: SpeakerItem[];
+  concludingSpeaker?: string;
   closingHymn: Hymn;
   closingPrayer: string;
 }

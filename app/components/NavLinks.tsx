@@ -5,11 +5,10 @@ import { usePathname } from 'next/navigation';
 import { useId, useState, type ReactNode } from 'react';
 
 interface NavLinksProps {
-  isAuthenticated: boolean;
   authSlot?: ReactNode;
 }
 
-export default function NavLinks({ isAuthenticated, authSlot }: NavLinksProps) {
+export default function NavLinks({ authSlot }: NavLinksProps) {
   const pathname = usePathname();
   const menuId = useId();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,7 +17,7 @@ export default function NavLinks({ isAuthenticated, authSlot }: NavLinksProps) {
     { name: 'Home', href: '/' },
     { name: 'All Meetings', href: '/meetings' },
     { name: "Today's Program", href: '/meetings/current' },
-    ...(isAuthenticated ? [{ name: 'New Meeting', href: '/meetings/new' }] : []),
+    { name: 'New Meeting', href: '/meetings/new' },
   ];
 
   function desktopLinkClass(href: string) {
